@@ -18,7 +18,7 @@
 
   // Helper to generate WhatsApp URL with encoded enquiry details
   function buildWhatsAppUrl(data) {
-    const config = window.VEDATAM_CONFIG || { broker: { whatsappNumber: "919810000000" } };
+    const config = window.VEDATAM_CONFIG || { broker: { whatsappNumber: "919797081234" } };
     const num = config.broker.whatsappNumber;
 
     let msg = `✨ *PRIVATE ENQUIRY: VEDATAM, SECTOR 14 GURUGRAM*\n\n`;
@@ -149,7 +149,7 @@
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         const customInterest = btn.getAttribute('data-interest') || 'Commercial Retail / Multiplex Spaces';
-        const config = window.VEDATAM_CONFIG || { broker: { whatsappNumber: "919810000000" } };
+        const config = window.VEDATAM_CONFIG || { broker: { whatsappNumber: "919797081234" } };
         const msg = `Hello Kashmiri Realtor, I am visiting the website and would like priority details & floor plans for Vedatam Sector 14 Gurugram (${customInterest}).`;
         const url = `https://wa.me/${config.broker.whatsappNumber}?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');

@@ -6,10 +6,10 @@ const VEDATAM_CONFIG = {
   broker: {
     name: "KASHMIRI REALTOR",
     tagline: "WHERE HERITAGE MEETS MODERN LUXURY",
-    phoneDisplay: "+91 98100 00000",
-    phoneCall: "+919810000000",
+    phoneDisplay: "+91 97970 81234",
+    phoneCall: "+919797081234",
     // Configurable WhatsApp recipient (Country code without '+' or special characters)
-    whatsappNumber: "919810000000",
+    whatsappNumber: "919797081234",
     email: "advisory@kashmirirealtor.com",
     address: "Gurugram, Haryana, India",
     establishedYear: "2010"
