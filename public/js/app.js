@@ -3,7 +3,7 @@
  * Navigation, header state, lightbox with image download, animated counters, and scroll interactions.
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+function initApp() {
   // 1. Header scroll state with smooth backdrop blur elevation
   const header = document.getElementById('main-header');
   function handleScroll() {
@@ -171,4 +171,13 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('[data-counter="true"]').forEach(el => {
     counterObserver.observe(el);
   });
-});
+}
+
+// Guard against DOMContentLoaded having already fired by the time this
+// script runs (e.g. Next.js's Script strategy="afterInteractive" loads
+// well after the DOM is ready, unlike a classic end-of-body <script> tag).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

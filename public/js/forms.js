@@ -27,8 +27,7 @@
     if (data.email) msg += `✉️ *Email:* ${data.email}\n`;
     if (data.interest) msg += `🏢 *Interested In:* ${data.interest}\n`;
     if (data.budget) msg += `💰 *Budget Range:* ${data.budget}\n`;
-    if (data.contactTime) msg += `⏰ *Preferred Time:* ${data.contactTime}\n`;
-    
+
     // Attribution
     const src = utmParams.utm_source ? `${utmParams.utm_source} (${utmParams.utm_campaign || 'web'})` : 'Kashmiri Realtor Web';
     msg += `📍 *Source:* ${src}\n\n`;
@@ -53,6 +52,25 @@
     }
   }
 
+  // Push lead to Google Sheets via our own /api/leads route (app/api/leads/route.js).
+  // That route holds the Google service account credentials server-side — the
+  // browser never sees them. Fire-and-forget: never blocks the WhatsApp
+  // redirect, and failures are non-fatal since the lead is already archived
+  // locally and sent via WhatsApp regardless.
+  function syncLeadToSheet(data) {
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...data,
+        pageUrl: window.location.href,
+        utm: utmParams
+      })
+    }).catch(function(err) {
+      console.warn('Google Sheets lead sync failed (lead still archived locally & sent via WhatsApp):', err);
+    });
+  }
+
   // Setup generic form handler
   function setupLeadForm(formId, successContainerId) {
     const form = document.getElementById(formId);
@@ -66,14 +84,12 @@
       const emailInput = form.querySelector('[name="email"]');
       const interestInput = form.querySelector('[name="interest"]');
       const budgetInput = form.querySelector('[name="budget"]');
-      const timeInput = form.querySelector('[name="contactTime"]');
 
       const name = nameInput ? nameInput.value.trim() : '';
       const phone = phoneInput ? phoneInput.value.trim() : '';
       const email = emailInput ? emailInput.value.trim() : '';
       const interest = interestInput ? interestInput.value : 'Commercial Retail / Investment';
       const budget = budgetInput ? budgetInput.value : 'Preferred Consultation';
-      const contactTime = timeInput ? timeInput.value : 'Anytime';
 
       // Validation
       if (!name || name.length < 2) {
@@ -95,11 +111,11 @@
         email,
         interest,
         budget,
-        contactTime,
         formId
       };
 
       archiveLead(leadData);
+      syncLeadToSheet(leadData);
 
       const waUrl = buildWhatsAppUrl(leadData);
 
@@ -141,10 +157,19 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  function init() {
     setupLeadForm('hero-enquiry-form', 'hero-form-success');
     setupLeadForm('modal-enquiry-form', 'modal-form-success');
     setupLeadForm('final-enquiry-form', 'final-form-success');
     setupDirectWhatsAppButtons();
-  });
+  }
+
+  // Guard against DOMContentLoaded having already fired by the time this
+  // script runs (e.g. Next.js's Script strategy="afterInteractive" loads
+  // well after the DOM is ready, unlike a classic end-of-body <script> tag).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

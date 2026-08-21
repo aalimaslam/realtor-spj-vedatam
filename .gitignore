@@ -3,3 +3,15 @@ docs/
 scratch/
 .DS_Store
 Thumbs.db
+
+# Secrets — never commit service account keys or env files
+*.json.key
+kashmiri-realtor-506208-c622039dd561.json
+.env
+.env*.local
+
+# Next.js
+/node_modules
+/.next/
+/out/
+next-env.d.ts
