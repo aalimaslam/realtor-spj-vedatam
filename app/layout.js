@@ -20,6 +20,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* Google Tag Manager */}
+        <Script id="gtm-init" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-TBKNMXMQ');`}
+        </Script>
+        {/* End Google Tag Manager */}
         {/* Google tag (gtag.js) */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-TWFTCZSCVS" strategy="afterInteractive" />
         <Script id="gtag-init" strategy="afterInteractive">
@@ -47,6 +56,16 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="bg-[#130F25] text-[#EEEEEE] font-brand antialiased selection:bg-[#EBC75D] selection:text-[#130F25] overflow-x-clip">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TBKNMXMQ"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         {children}
 
         {/* Core Application Scripts — unchanged from the static site, only the
